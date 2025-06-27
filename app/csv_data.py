@@ -6,18 +6,31 @@ from exceptions import OperatorNotFound, AggregateFunctionNotFound
 
 
 class CSVItem:
-    def __init__(self, data: dict):
+    '''
+    Строка в таблице.
+    '''
+
+    def __init__(self, data: dict) -> None:
         for key, value in data.items():
             value = self._convert_values(value)
             setattr(self, key, value)
 
-    def _convert_values(self, value):
+    def _convert_values(self, value: str) -> str | float:
+        '''
+        Конвертирует string в float, если возможно.
+        '''
+
         try:
             return float(value)
         except ValueError:
             return value
 
-    def __getitem__(self, attr: str):
+    def __getitem__(self, attr: str) -> str | float:
+        '''
+        Возвращает значение атрибута класса, запрошенного
+        в виде class_object[<attr>].
+        '''
+
         try:
             return getattr(self, attr)
         except AttributeError as e:
@@ -25,6 +38,10 @@ class CSVItem:
 
 
 class CSVData:
+    '''
+    Таблица, полученная из csv-файла.
+    '''
+
     OPERATORS = ['>', '<', '=']
 
     def __init__(self, file_path: str):
@@ -37,21 +54,33 @@ class CSVData:
                 csv_item = CSVItem(data_item)
                 self.data.append(csv_item)
 
-    def min(self, column: str):
+    def min(self, column: str) -> None:
+        '''
+        Поиск минимального числа в колонке.
+        '''
+
         min_value = float('inf')
         for item in self.data:
             min_value = min(item[column], min_value)
 
         self.aggregated_data = {column + '_min': min_value}
 
-    def max(self, column: str):
+    def max(self, column: str) -> None:
+        '''
+        Поиск максимального чесла в колонке.
+        '''
+
         max_value = float('-inf')
         for item in self.data:
             max_value = max(item[column], max_value)
 
         self.aggregated_data = {column + '_max': max_value}
 
-    def avg(self, column: str):
+    def avg(self, column: str) -> None:
+        '''
+        Поиск среднего числа для колонки.
+        '''
+
         avg_value = 0
         for item in self.data:
             avg_value += item[column]
@@ -59,7 +88,12 @@ class CSVData:
 
         self.aggregated_data = {column + '_avg': avg_value}
 
-    def split_expression(self, condition: str):
+    def split_expression(self, condition: str) -> tuple:
+        '''
+        Разделяет строку вида <Название колонки><Оператор сравнения><Значение>
+        на три соответствующих переменных.
+        '''
+
         operator = None
         for op in self.OPERATORS:
             if op in condition:
@@ -76,7 +110,11 @@ class CSVData:
         except ValueError:
             return (condition[0], operator, condition[1])
 
-    def compare(self, a, b, op) -> bool:
+    def compare(self, a: str | float, b: str | float, op: str) -> bool:
+        '''
+        Сравнивает переданные в метод значения между собой.
+        '''
+
         ops = {
             '>': lambda x, y: x > y,
             '<': lambda x, y: x < y,
@@ -84,7 +122,7 @@ class CSVData:
         }
         return ops[op](a, b)
 
-    def filter(self, condition: str):
+    def filter(self, condition: str) -> None:
         '''
         Фильтрует данные в таблице.
 
@@ -101,7 +139,7 @@ class CSVData:
 
         self.data = filtered_data
 
-    def aggregate(self, condition: str):
+    def aggregate(self, condition: str) -> None:
         '''
         Агрегация значений таблицы.
 
@@ -134,7 +172,7 @@ class CSVData:
                     'Агрегация не поддерживает данную операцию.'
                 )
 
-    def print(self, tablefmt: str = 'grid', headers: str = 'keys'):
+    def print(self, tablefmt: str = 'grid', headers: str = 'keys') -> None:
         '''
         Выводит данные в консоль.
 
