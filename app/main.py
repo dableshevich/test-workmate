@@ -1,6 +1,6 @@
 import argparse
 
-from app.csv_data import CSVData
+from csv_data import CSVData
 
 
 def main():

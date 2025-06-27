@@ -2,7 +2,7 @@ import csv
 
 from tabulate import tabulate
 
-from app.exceptions import OperatorNotFound, AggregateFunctionNotFound
+from exceptions import OperatorNotFound, AggregateFunctionNotFound
 
 
 class CSVItem:
