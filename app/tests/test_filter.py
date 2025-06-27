@@ -1,7 +1,7 @@
 import pytest
 
-from app.csv_data import CSVData
-from app.exceptions import OperatorNotFound
+from csv_data import CSVData
+from exceptions import OperatorNotFound
 
 
 @pytest.fixture

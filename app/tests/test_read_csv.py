@@ -1,6 +1,6 @@
 import pytest
 
-from app.csv_data import CSVItem, CSVData
+from csv_data import CSVItem, CSVData
 
 
 def test_create_csv_item_success():

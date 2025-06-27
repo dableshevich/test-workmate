@@ -1,7 +1,7 @@
 import pytest
 
-from app.csv_data import CSVData
-from app.exceptions import AggregateFunctionNotFound
+from csv_data import CSVData
+from exceptions import AggregateFunctionNotFound
 
 
 @pytest.fixture
